@@ -1,0 +1,41 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from BankService WSDL service -->
+
+  <service name="Bank" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://controllers"/>
+      <parameter name="wsdlServiceElement" value="BankService"/>
+      <parameter name="schemaQualified" value="http://controllers,http://entities"/>
+      <parameter name="wsdlServicePort" value="Bank"/>
+      <parameter name="className" value="controllers.BankSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="Bank"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="createBankAccount" qname="operNS:createBankAccount" xmlns:operNS="http://controllers" returnQName="retNS:createBankAccountReturn" xmlns:retNS="http://controllers" returnType="rtns:BankAccount" xmlns:rtns="http://entities" soapAction="" >
+        <parameter qname="pns:name" xmlns:pns="http://controllers" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:initialAmount" xmlns:pns="http://controllers" type="tns:float" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getBankAccount" qname="operNS:getBankAccount" xmlns:operNS="http://controllers" returnQName="retNS:getBankAccountReturn" xmlns:retNS="http://controllers" returnType="rtns:BankAccount" xmlns:rtns="http://entities" soapAction="" >
+        <parameter qname="pns:name" xmlns:pns="http://controllers" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="getBankAccount createBankAccount"/>
+
+      <typeMapping
+        xmlns:ns="http://entities"
+        qname="ns:BankAccount"
+        type="java:entities.BankAccount"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+  </service>
+</deployment>
