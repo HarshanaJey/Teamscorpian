@@ -10,7 +10,8 @@ public class Player implements Serializable {
 	private double stock_value;
 	
 	public Player() {
-		
+		this.player_name = "name";
+		this.stock_value = "0";
 	}
 	public Player(String player_name, double stock_value) {
 		this.player_name = player_name;
